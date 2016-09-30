@@ -142,7 +142,8 @@
     if (e.target !== $("input")) {
       $("input:checked").removeAttr("checked");
       overlays.clearLayers();
-      overlays.addLayer(layers);
+      clusterGroup = layers;
+      overlays.addLayer(clusterGroup);
       // Add center eventlistener to the new clusterGroup
       addCenterEventToLayers();
       // Refresh the Stops panel
