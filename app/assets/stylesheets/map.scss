@@ -1,0 +1,127 @@
+// Place all the styles related to the map controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+  background-color: black;
+  height: 100%;
+}
+
+h1 {
+  float:left;
+  display:block;
+  font-size: 60px;
+  color: #fff;
+  font-family: "Palatino Linotype";
+  buttom-margin: 10px;
+  margin-left: 30px;
+  margin-top: 20px;
+}
+
+#chart-button:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid white;
+}
+
+#chart-button {
+  background-color: black;
+  color: white;
+  border: 2px solid white;
+  font-size: 30px;
+  border-radius: 12px;
+  font-family: "Palatino Linotype";
+  right: 70px;
+  display:inline-block;
+  position: absolute;
+  top: 70px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
+#reset-button:hover {
+  background-color: white;
+  color: rgba(0,0,0,0.5);
+  border: 2px solid white;
+}
+
+#reset-button {
+  positon:absolute;
+  left: 45%;
+  clear: right;
+  margin-left: 25%;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  border: 2px solid white;
+  font-size: 18px;
+  border-radius: 12px;
+  font-family: "Palatino Linotype";
+  right: 70px;
+  display:inline-block;
+  position: absolute;
+  top: 70px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
+#map {
+  top: 60px;
+  height: 540px;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  border-radius:10px;
+}
+
+pre.ui-coordinates {
+  background:rgba(0,0,0,0.5);
+  position:absolute;
+  top:162px;
+  right:10.5%;
+  padding:5px 10px;
+  color:#fff;
+  font-size:11px;
+  line-height:18px;
+  border-radius:3px;
+  max-height:240px;
+  overflow:auto;
+  width:300px;
+  height: 200px;
+  font-family: "Palatino Linotype";
+  border: 2px;
+}
+
+p {
+  font-family: "Palatino Linotype";
+  font-size: 15px;
+}
+
+#form {
+  background:rgba(0,0,0,0.5);
+  position:absolute;
+  top: 491px;
+  right:10.5%;
+  padding:5px 10px;
+  color:#fff;
+  font-size:15px;
+  line-height:18px;
+  border-radius:3px;
+  max-height:240px;
+  overflow:auto;
+  width:300px;
+  height: 200px;
+  font-family: "Palatino Linotype";
+}
+
+form {
+ float: left;
+}
+
+form#boarding-sum-greater {
+ clear: right;
+ margin-left: 25%;
+}
+
+#canvas-div {
+  display: none;
+}

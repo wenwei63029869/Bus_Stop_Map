@@ -1,0 +1,35 @@
+<div class='header'>
+  <h1>Bus Stop Map</h1>
+  <button id='chart-button'> See boarding data in a chart </botton>
+</div>
+<div id='map'></div>
+<pre id='coordinates' class='ui-coordinates'><p>Stops: 0</p></pre>
+<div id='form'>
+  <h2>Boardings number</h2>
+  <form class='boarding-sum' id='boarding-sum-smaller'>
+    <div><input type='radio' name='filters' value='800'> < 800 </div>
+    <div><input type='radio' name='filters' value='600'> < 600 </div>
+    <div><input type='radio' name='filters' value='400'> < 400 </div>
+    <div><input type='radio' name='filters' value='200'> < 200 </div>
+    <div><input type='radio' name='filters' value='50'> < 50 </div>
+    <div><input type='radio' name='filters' value='10'> < 10 </div>
+  </form>
+  <form class='boarding-sum' id='boarding-sum-greater'>
+    <div><input type='radio' name='filters' value='-800'> > 800 </div>
+    <div><input type='radio' name='filters' value='-600'> > 600 </div>
+    <div><input type='radio' name='filters' value='-400'> > 400 </div>
+    <div><input type='radio' name='filters' value='-200'> > 200 </div>
+    <div><input type='radio' name='filters' value='-50'> > 50 </div>
+    <div><input type='radio' name='filters' value='-10'> > 10 </div>
+  </form>
+  <button id='reset-button'>Reset</button>
+</div>
+
+<div  id="myModal" class="myModal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">x</span>
+    <h2>Boarding numbers</h2>
+    <canvas id="myChart" width="100" height="100"></canvas>
+  </div>
+</div>
