@@ -1,6 +1,6 @@
 (function() {
-  var map;
-  var overlays,
+  var map,
+      overlays,
       // layers is used to store the initial layers which includes all the markers.
       layers,
       // contains the most recent displayed markers. All the eventlisteners will be added to this layers container
@@ -23,7 +23,7 @@
       $('.boarding-sum').on("click", "input", function(e) {
         $("input:checked").removeAttr("checked");
         $(this).prop("checked", true)
-        showStops(this.value);
+        applyFilter(this.value);
       });
 
       // Add "click" eventlisterner to form area except input
@@ -40,11 +40,13 @@
           count = 0,
           data = [0, 0, 0, 0, 0];
       clusterGroup.eachLayer(function(layer) {
+          // Check if the layer is within the bounder
           if (bounds.contains(layer.getLatLng())) {
               var options = layer.options,
                   boardingSum = options.boardingSum;
               inBounds.push(options.title);
               ++count;
+              // Create dataset for chart
               switch(true) {
                 case (boardingSum > 0 && boardingSum <= 200) :
                   data[0] += 1;
@@ -65,6 +67,7 @@
           }
       });
       document.getElementById('coordinates').innerHTML = '<p>Stops: ' + count + '</p>' + inBounds.join('\n');
+      // Create chart for new markers group
       ChartModule.createBarChart(data)
   }
 
@@ -86,8 +89,10 @@
         onMove();
         addCenterEventToLayers();
       },
-      error:function() {
-        alert("Could not load the stops");
+      error:function(error) {
+        var errors = $.parseJSON(error.responseText).errors
+        console.log(errors);
+        alert(errors);
       }
     })
   }
@@ -115,7 +120,7 @@
   }
 
   // Only show stops with had smaller or the same boardingSum than the selected filter
-  function showStops(value) {
+  function applyFilter(value) {
     // Erase previously displayed markers(layers)
     overlays.clearLayers();
     // create an empty clusterGroup and add it to overlays

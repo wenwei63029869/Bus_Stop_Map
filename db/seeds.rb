@@ -27,20 +27,20 @@ csv.each do |row|
   location = processLocation(row["location"])
   routes = processRoutes(row['routes'])
   # populate Stop
-  stop = Stop.create(on_street: row["on_street"], cross_street: row["cross_street"], latitude: location[0], longitude: location[1], route_numbers: row['routes'])
+  stop = Stop.create(on_street: row["on_street"], cross_street: row["cross_street"], latitude: location[0].to_f, longitude: location[1].to_f, route_numbers: row['routes'])
 
   # populate Route
   routes.each do |route|
     route = Route.find_or_create_by(route_number: route)
     #populate RouteStops
-    RouteStop.create(boardings: row["boardings"], alightings: row["alightings"], stop_id: stop.id, route_id: route.id)
+    RouteStop.create(boardings: ('%.2f' % row["boardings"].to_f), alightings: ('%.2f' % row["alightings"].to_f), stop_id: stop.id, route_id: route.id)
   end
 end
 
 Stop.all.each do |stop|
   boarding_sum = 0.00
   stop.route_stops.each do |route_stop|
-    boarding_sum +=  (route_stop.boardings.to_f)
+    boarding_sum += (route_stop.boardings.to_f)
   end
   stop.update(boarding_sum: ('%.2f' % boarding_sum))
 end

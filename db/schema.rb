@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(version: 20160928221212) do
   enable_extension "plpgsql"
 
   create_table "route_stops", force: :cascade do |t|
-    t.string  "boardings"
-    t.string  "alightings"
+    t.float   "boardings"
+    t.float   "alightings"
     t.integer "stop_id"
     t.integer "route_id"
   end
@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 20160928221212) do
   create_table "stops", force: :cascade do |t|
     t.string "on_street"
     t.string "cross_street"
-    t.string "latitude"
-    t.string "longitude"
+    t.float  "latitude"
+    t.float  "longitude"
     t.string "route_numbers"
     t.float  "boarding_sum"
   end
