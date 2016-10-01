@@ -1,12 +1,10 @@
 $(document).on("ready", function(e) {
   // Get the modal
-  var modal = $('#myModal');
-
+  var modal = $('#myModal'),
   // Get the button that opens the modal
-  var btn = $("#chart-button");
-
+      btn = $("#chart-button"),
   // Get the <span> element that closes the modal
-  var span = $(".close");
+      span = $(".close");
 
   // When the user clicks on the button, open the modal
   btn.on('click', function() {

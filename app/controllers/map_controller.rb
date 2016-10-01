@@ -5,10 +5,10 @@ class MapController < ApplicationController
 
   def get_stops
     @stops = Stop.all
-    if @stops
+    if @stops != []
       render json: @stops
     else
-      render :json => { :errors => "Can't load get_stopss data." }, :status => 404
+      render :json => { :errors => "There is no stop data in database." }, :status => 404
     end
   end
 end
