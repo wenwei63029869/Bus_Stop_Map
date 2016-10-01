@@ -38,9 +38,6 @@ csv.each do |row|
 end
 
 Stop.all.each do |stop|
-  boarding_sum = 0.00
-  stop.route_stops.each do |route_stop|
-    boarding_sum += (route_stop.boardings.to_f)
-  end
+  boarding_sum = RouteStop.where(stop_id: stop.id).sum(:boardings)
   stop.update(boarding_sum: ('%.2f' % boarding_sum))
 end
