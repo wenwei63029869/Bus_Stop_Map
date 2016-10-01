@@ -18,7 +18,7 @@ def processRoutes(routes_string)
 end
 
 # Read csv file
-csv_text = File.read('./CTA_-_Ridership_-_Avg._Weekday_Bus_Stop_Boardings_in_October_2012.csv')
+csv_text = File.read('./bus_stop.csv')
 csv = CSV.parse(csv_text, :headers => true)
 
 # iterate through rows and populate database
