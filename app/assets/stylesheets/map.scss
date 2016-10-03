@@ -47,7 +47,8 @@ h1 {
 
 #reset-button {
   positon:absolute;
-  left: 45%;
+  left: 43%;
+  top: 35%;
   clear: right;
   margin-left: 25%;
   background-color: rgba(0,0,0,0.5);
@@ -59,7 +60,6 @@ h1 {
   right: 70px;
   display:inline-block;
   position: absolute;
-  top: 70px;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
 }
@@ -119,7 +119,25 @@ form {
 
 form#boarding-sum-greater {
  clear: right;
- margin-left: 25%;
+ margin-left: 18%;
+}
+
+#streets {
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  width: 40%;
+}
+
+#streets input {
+  font-size:12px;
+  padding:4px 2px;
+  border:solid 1px #000000;
+  width:45%;
+  margin:2px 0 20px 10px;
+  color:#000000;
+  float:left;
+  border-radius:5px;
 }
 
 #canvas-div {

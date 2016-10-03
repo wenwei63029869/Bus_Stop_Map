@@ -5,10 +5,13 @@ var mapModule = (function() {
       layers,
       // contains the most recent displayed markers. All the eventlisteners will be added to this layers container
       clusterGroup,
+      StreetFilterApplied = false,
       accessToken = 'pk.eyJ1Ijoid2Vud2VpNjMwMjk4NjkiLCJhIjoiY2l0bmc5MmFvMDA1MTNvbDRmZ3A4d3B1aiJ9.lJjkZn-QWyhTixwvwdBnaA',
       customMarker = L.Marker.extend({
          options: {
-            boardingSum: 'Custom data!'
+            boardingSum: 'Custom data!',
+            onStreet: 'Custom',
+            crossStreet: 'Custom'
          }
       });
 
@@ -26,7 +29,6 @@ var mapModule = (function() {
     },
     // This function will get the boundary fo the map and filter out all the markers with lan and long that are within the boundary and print their title to "coordinates" box.
     onMove: function () {
-      console.log("called");
       var inBounds = [],
           bounds = map.getBounds();
           count = 0
@@ -55,6 +57,8 @@ var mapModule = (function() {
           marker = new customMarker(new L.LatLng(stop.latitude, stop.longitude), {
               icon: L.mapbox.marker.icon({'marker-symbol': 'bus', 'marker-color': '0044FF'}),
               boardingSum: boardingSum,
+              onStreet: stop.on_street,
+              crossStreet: stop.cross_street,
               title: title
           })
       marker.bindPopup(popupContent, {closeButton: false, minWidth: 300});
@@ -63,8 +67,11 @@ var mapModule = (function() {
 
     // Add center eventlistener to clusterGroup
     addCenterEventToLayers: function () {
+      // Need to remove the listener first; otherwise center won't work.
+      clusterGroup.off('click');
       clusterGroup.on('click', function(e) {
-          map.panTo(e.layer.getLatLng());
+        console.log("run");
+        map.panTo(e.layer.getLatLng());
       });
     },
 
@@ -76,16 +83,7 @@ var mapModule = (function() {
         url: '/get_stops.json',
         success:function(stops) {
           var stops = $.parseJSON(stops);
-          layers = new L.MarkerClusterGroup();
-          // Create marker for each stop
-          for (var i = 0; i < stops.length; ++i) {
-              that.createNewMarker(stops[i]);
-          }
-          overlays.addLayer(layers);
-          clusterGroup = layers;
-          // Add list populate eventlistener to new clusterGroup
-          that.onMove();
-          that.addCenterEventToLayers();
+          that.createMarkers(stops);
         },
         error:function(error) {
           var errors = $.parseJSON(error.responseText).errors
@@ -94,12 +92,27 @@ var mapModule = (function() {
       })
     },
 
+    createMarkers: function(stops) {
+      var that = this;
+      layers = new L.MarkerClusterGroup();
+      // Create marker for each stop
+      for (var i = 0; i < stops.length; ++i) {
+          that.createNewMarker(stops[i]);
+      }
+      overlays.addLayer(layers);
+      clusterGroup = layers;
+      // Add list populate eventlistener to new clusterGroup
+      that.onMove();
+      that.addCenterEventToLayers();
+    },
+
     // Only show stops with had smaller or the same boardingSum than the selected filter
-    applyFilter: function (value) {
+    applyBoardingFilter: function (value) {
       // Erase previously displayed markers(layers)
       overlays.clearLayers();
       // create an empty clusterGroup and add it to overlays
       clusterGroup = new L.MarkerClusterGroup().addTo(overlays);
+
       layers.eachLayer(function(layer) {
         value = parseInt(value);
         if (value > 0) {
@@ -112,6 +125,46 @@ var mapModule = (function() {
           }
         }
       });
+      // Add center eventlistener to the new clusterGroup
+      this.addCenterEventToLayers();
+      // Refresh the Stops panel
+      this.onMove();
+    },
+
+    applyStreetsFilter: function (e) {
+      var streetsForm = $(e.target).parent(),
+          onStreet = streetsForm.find('input[name=on-street]').val().toUpperCase(),
+          crossStreet = streetsForm.find('input[name=cross-street]').val().toUpperCase()
+
+      // Erase previously displayed markers(layers)
+      overlays.clearLayers();
+      // create an empty clusterGroup and add it to overlays
+      clusterGroup = new L.MarkerClusterGroup().addTo(overlays);
+      // show all the markers if the field become empty
+      if (onStreet === '' && crossStreet === '') {
+        clusterGroup = layers;
+        overlays.addLayer(clusterGroup);
+      } else if (onStreet !== '' && crossStreet !== '') {
+        layers.eachLayer(function(layer) {
+          if (layer.options.onStreet.startsWith(onStreet) && layer.options.crossStreet.startsWith(crossStreet)) {
+            clusterGroup.addLayer(layer);
+          }
+        })
+      } else {
+        if (onStreet !== '') {
+          layers.eachLayer(function(layer) {
+            if (layer.options.onStreet.startsWith(onStreet)) {
+              clusterGroup.addLayer(layer);
+            }
+          })
+        } else if (crossStreet !== '') {
+          layers.eachLayer(function(layer) {
+            if (layer.options.crossStreet.startsWith(crossStreet)) {
+              clusterGroup.addLayer(layer);
+            }
+          })
+        }
+      }
       // Add center eventlistener to the new clusterGroup
       this.addCenterEventToLayers();
       // Refresh the Stops panel
