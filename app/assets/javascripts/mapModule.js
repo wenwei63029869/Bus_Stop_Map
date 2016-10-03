@@ -62,7 +62,7 @@ var mapModule = (function() {
               title: title
           })
       marker.bindPopup(popupContent, {closeButton: false, minWidth: 300});
-      layers.addLayer(marker);
+      return marker;
     },
 
     // Add center eventlistener to clusterGroup
@@ -83,7 +83,8 @@ var mapModule = (function() {
         url: '/get_stops.json',
         success:function(stops) {
           var stops = $.parseJSON(stops);
-          that.createMarkers(stops);
+          layers = new L.MarkerClusterGroup();
+          that.createMarkers(layers, stops);
         },
         error:function(error) {
           var errors = $.parseJSON(error.responseText).errors
@@ -92,15 +93,15 @@ var mapModule = (function() {
       })
     },
 
-    createMarkers: function(stops) {
+    createMarkers: function(currentLayers, stops) {
       var that = this;
-      layers = new L.MarkerClusterGroup();
       // Create marker for each stop
       for (var i = 0; i < stops.length; ++i) {
-          that.createNewMarker(stops[i]);
+          var marker = that.createNewMarker(stops[i]);
+          currentLayers.addLayer(marker);
       }
-      overlays.addLayer(layers);
-      clusterGroup = layers;
+      overlays.addLayer(currentLayers);
+      clusterGroup = currentLayers;
       // Add list populate eventlistener to new clusterGroup
       that.onMove();
       that.addCenterEventToLayers();
@@ -131,11 +132,7 @@ var mapModule = (function() {
       this.onMove();
     },
 
-    applyStreetsFilter: function (e) {
-      var streetsForm = $(e.target).parent(),
-          onStreet = streetsForm.find('input[name=on-street]').val().toUpperCase(),
-          crossStreet = streetsForm.find('input[name=cross-street]').val().toUpperCase()
-
+    getStreets: function(onStreet, crossStreet) {
       // Erase previously displayed markers(layers)
       overlays.clearLayers();
       // create an empty clusterGroup and add it to overlays
@@ -169,6 +166,13 @@ var mapModule = (function() {
       this.addCenterEventToLayers();
       // Refresh the Stops panel
       this.onMove();
+    },
+
+    applyStreetsFilter: function (e) {
+      var streetsForm = $(e.target).parent(),
+          onStreet = streetsForm.find('input[name=on-street]').val().toUpperCase(),
+          crossStreet = streetsForm.find('input[name=cross-street]').val().toUpperCase()
+      this.getStreets(onStreet, crossStreet);
     },
 
     resetFilter: function (e) {

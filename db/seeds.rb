@@ -10,7 +10,7 @@ def processRoutes(routes_string)
   # get all the routes that stop at a stop
   # some row contains empty column. In that case, I will just assume there is no more buses stop there
   if routes_string
-    routes_string.gsub!(/[^\d,]/, "")
+    routes_string.gsub!(/[^^a-zA-Z\d,]/, "")
     return routes_string.split(",")
   else
     return []
@@ -18,7 +18,7 @@ def processRoutes(routes_string)
 end
 
 # Read csv file
-csv_text = File.read('./CTA_-_Ridership_-_Avg._Weekday_Bus_Stop_Boardings_in_October_2012.csv')
+csv_text = File.read('./bus_stop.csv')
 csv = CSV.parse(csv_text, :headers => true)
 
 # iterate through rows and populate database
