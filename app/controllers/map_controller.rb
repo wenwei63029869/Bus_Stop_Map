@@ -1,5 +1,4 @@
 class MapController < ApplicationController
-  include MapHelper
   def index
   end
 
